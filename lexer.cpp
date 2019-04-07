@@ -4,19 +4,23 @@
 
 #include "lexer.h"
 
-/// gettok - Return the next token from standard input.
 int gettok() {
 
-    static int LastChar = ' ';
+    int LastChar = ' ';
 
     // Skip any whitespace.
     while (isspace(LastChar))
         LastChar = getchar();
 
+    std::cout << "LastChar-" << LastChar << "\n";
+
     if (isalpha(LastChar)) {
+        std::cout << "LastChar->" << LastChar << "\n";
         IdentifierStr = std::to_string(LastChar);
+        std::cout << "IdentifierStr- " << IdentifierStr << "\n";
         while (isalnum(LastChar = getchar()))
             IdentifierStr += std::to_string(LastChar);
+        std::cout << "IdentifierStr-- " << IdentifierStr << "\n";
 
         if (IdentifierStr == "def")
             return tok_def;
@@ -51,8 +55,10 @@ int gettok() {
         return tok_eof;
 
     // Otherwise, just return the character as its ascii value.
+    std::cout << "LastChar--" << LastChar << "\n";
     int ThisChar = LastChar;
     LastChar = getchar();
+    std::cout << "LastChar--- " << LastChar << "\n";
     return ThisChar;
 }
 
