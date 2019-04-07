@@ -1,0 +1,19 @@
+top ::= definition | external | expression | ';'
+toplevelexpr ::= expression
+
+definition ::= 'def' prototype expression
+external ::= 'extern' prototype
+expression ::= primary binoprhs
+
+prototype ::= id '(' id* ')'
+primary
+  ::= identifierexpr
+  ::= numberexpr
+  ::= parenexpr
+binoprhs ::= ('+' primary)*
+
+identifierexpr
+  ::= identifier
+  ::= identifier '(' expression* ')'
+numberexpr ::= number
+parenexpr ::= '(' expression ')'
