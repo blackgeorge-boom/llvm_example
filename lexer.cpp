@@ -12,15 +12,10 @@ int gettok() {
     while (isspace(LastChar))
         LastChar = getchar();
 
-    std::cout << "LastChar-" << LastChar << "\n";
-
     if (isalpha(LastChar)) {
-        std::cout << "LastChar->" << LastChar << "\n";
-        IdentifierStr = std::to_string(LastChar);
-        std::cout << "IdentifierStr- " << IdentifierStr << "\n";
+        IdentifierStr = std::string(1, LastChar);
         while (isalnum(LastChar = getchar()))
-            IdentifierStr += std::to_string(LastChar);
-        std::cout << "IdentifierStr-- " << IdentifierStr << "\n";
+            IdentifierStr += std::string(1, LastChar);
 
         if (IdentifierStr == "def")
             return tok_def;
