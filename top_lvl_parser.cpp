@@ -40,17 +40,19 @@ void MainLoop() {
         fprintf(stderr, "ready> ");
         switch (CurTok) {
             case tok_eof:
-                std::cout << "wut\n";
+                std::cout << "tok_eof\n";
                 return;
             case ';':
+                std::cout << "tok_;\n";
                 // if you parse it you get nullptr as AST
                 getNextToken();
                 break;
             case tok_def:
-                std::cout << "ji\n";
+                std::cout << "tok_def\n";
                 HandleDefinition();
                 break;
             case tok_extern:
+                std::cout << "tok_extern\n";
                 HandleExtern();
                 break;
             default:

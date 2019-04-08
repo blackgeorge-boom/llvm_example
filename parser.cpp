@@ -6,13 +6,17 @@
 
 #include "parser.h"
 
-int getNextToken() {
-    CurTok = gettok();
-    std::cout << "CurTok " << CurTok << "\n";
-    return CurTok;
+int CurTok = 0;
+
+int getNextToken()
+{
+    return CurTok = gettok();
+//    std::cout << "CurTok " << CurTok << "\n";
+//    return CurTok;
 }
 
-int GetTokPrecedence() {
+int GetTokPrecedence()
+{
     if (!isascii(CurTok))
         return -1;
 

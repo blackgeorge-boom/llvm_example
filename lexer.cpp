@@ -1,11 +1,10 @@
 //
 // Created by blackgeorge on 4/6/19.
 //
-
 #include "lexer.h"
 
-int gettok() {
-
+int gettok()
+{
     int LastChar = ' ';
 
     // Skip any whitespace.
@@ -13,9 +12,9 @@ int gettok() {
         LastChar = getchar();
 
     if (isalpha(LastChar)) {
-        IdentifierStr = std::string(1, LastChar);
-        while (isalnum(LastChar = getchar()))
-            IdentifierStr += std::string(1, LastChar);
+        IdentifierStr = LastChar;
+        while (isalnum((LastChar = getchar())))
+            IdentifierStr += LastChar;
 
         if (IdentifierStr == "def")
             return tok_def;
@@ -27,7 +26,7 @@ int gettok() {
     if (isdigit(LastChar) || LastChar == '.') {
         std::string NumStr;
         do {
-            NumStr += std::to_string(LastChar);
+            NumStr += LastChar;
             LastChar = getchar();
         } while (isdigit(LastChar) || LastChar == '.');
 
@@ -50,10 +49,8 @@ int gettok() {
         return tok_eof;
 
     // Otherwise, just return the character as its ascii value.
-    std::cout << "LastChar--" << LastChar << "\n";
     int ThisChar = LastChar;
     LastChar = getchar();
-    std::cout << "LastChar--- " << LastChar << "\n";
     return ThisChar;
 }
 
