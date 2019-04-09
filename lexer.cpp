@@ -5,7 +5,7 @@
 
 int gettok()
 {
-    int LastChar = ' ';
+    static int LastChar = ' ';
 
     // Skip any whitespace.
     while (isspace(LastChar))
@@ -50,7 +50,7 @@ int gettok()
 
     // Otherwise, just return the character as its ascii value.
     int ThisChar = LastChar;
-    LastChar = getchar();
+    LastChar = getchar();   // LastChar is static!
     return ThisChar;
 }
 

@@ -36,23 +36,18 @@ void HandleTopLevelExpression() {
 
 void MainLoop() {
     while (true) {
-        std::cout << "tok " << CurTok << "\n";
         fprintf(stderr, "ready> ");
         switch (CurTok) {
             case tok_eof:
-                std::cout << "tok_eof\n";
                 return;
             case ';':
-                std::cout << "tok_;\n";
                 // if you parse it you get nullptr as AST
                 getNextToken();
                 break;
             case tok_def:
-                std::cout << "tok_def\n";
                 HandleDefinition();
                 break;
             case tok_extern:
-                std::cout << "tok_extern\n";
                 HandleExtern();
                 break;
             default:

@@ -8,11 +8,11 @@
 
 int CurTok = 0;
 
+std::map<char, int> BinopPrecedence;
+
 int getNextToken()
 {
     return CurTok = gettok();
-//    std::cout << "CurTok " << CurTok << "\n";
-//    return CurTok;
 }
 
 int GetTokPrecedence()
