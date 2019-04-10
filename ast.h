@@ -1,3 +1,5 @@
+#include <utility>
+
 //
 // Created by blackgeorge on 11/14/18.
 //
@@ -13,13 +15,13 @@
 class ExprAST {
 public:
     virtual ~ExprAST() = default;
-//        virtual llvm::Value *codegen() = 0;
+    virtual llvm::Value* codegen() = 0;
 };
 
 /// NumberExprAST - Expression class for numeric literals like "1.0".
 class NumberExprAST : public ExprAST {
     double Val;
-//        virtual llvm::Value *codegen();
+    llvm::Value* codegen() override;
 
 public:
     explicit NumberExprAST(double Val) : Val(Val) {};
@@ -30,7 +32,9 @@ class VariableExprAST : public ExprAST {
     std::string Name;
 
 public:
-    explicit VariableExprAST(const std::string &Name) : Name(Name) {}
+    explicit VariableExprAST(std::string Name) : Name(std::move(Name)) {}
+
+    llvm::Value* codegen() override;
 };
 
 /// BinaryExprAST - Expression class for a binary operator.
@@ -43,6 +47,8 @@ public:
                   std::unique_ptr<ExprAST> LHS,
                   std::unique_ptr<ExprAST> RHS)
         : Op(op), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
+
+    llvm::Value* codegen() override;
 };
 
 /// CallExprAST - Expression class for function calls.
@@ -54,6 +60,8 @@ public:
     CallExprAST(std::string &Callee,
                 std::vector<std::unique_ptr<ExprAST>> Args)
         : Callee(Callee), Args(std::move(Args)) {}
+
+    llvm::Value* codegen() override;
 };
 
 /// PrototypeAST - This class represents the "prototype" for a function,
@@ -68,6 +76,8 @@ public:
         : Name(Name), Args(std::move(Args)) {}
 
     const std::string &getName() const { return Name; }
+
+    llvm::Function *codegen();
 };
 
 /// FunctionAST - This class represents a function definition itself.
@@ -79,6 +89,8 @@ public:
     FunctionAST(std::unique_ptr<PrototypeAST> Proto,
                 std::unique_ptr<ExprAST> Body)
         : Proto(std::move(Proto)), Body(std::move(Body)) {}
+
+    llvm::Function *codegen();
 };
 
 

@@ -7,8 +7,6 @@
 
 #include "parser.h"
 
-extern int CurTok;
-
 void HandleDefinition();
 
 void HandleExtern();

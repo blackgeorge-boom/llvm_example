@@ -48,8 +48,7 @@ std::unique_ptr<ExprAST> ParsePrimary();
 
 /// binoprhs
 ///   ::= ('+' primary)*
-std::unique_ptr<ExprAST> ParseBinOpRHS(int ExprPrec,
-                                              std::unique_ptr<ExprAST> LHS);
+std::unique_ptr<ExprAST> ParseBinOpRHS(int ExprPrec, std::unique_ptr<ExprAST> LHS);
 
 /// expression
 ///   ::= primary binoprhs
