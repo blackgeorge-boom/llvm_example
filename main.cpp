@@ -20,7 +20,7 @@
 #include "parser.h"
 #include "top_lvl_parser.h"
 
-using namespace llvm;
+//using namespace llvm;
 
 //===----------------------------------------------------------------------===//
 // Abstract Syntax Tree (aka Parse Tree)
