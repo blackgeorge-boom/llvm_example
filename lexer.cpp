@@ -10,6 +10,7 @@ int gettok()
     // Skip any whitespace.
     while (isspace(LastChar))
         LastChar = getchar();
+    std::cout <<"hey";
 
     if (isalpha(LastChar)) {
         IdentifierStr = LastChar;

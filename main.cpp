@@ -45,8 +45,8 @@
 // Main driver code.
 //===----------------------------------------------------------------------===//
 
-int main() {
-
+int main()
+{
     // Install standard binary operators.
     // 1 is lowest precedence.
     BinopPrecedence['<'] = 10;
@@ -58,8 +58,14 @@ int main() {
     fprintf(stderr, "ready> ");
     getNextToken();
 
+    // Make the module, which holds all the code.
+    TheModule = llvm::make_unique<llvm::Module>("my cool jit", TheContext);
+
     // Run the main "interpreter loop" now.
     MainLoop();
+
+    // Print out all of the generated code.
+    TheModule->print(llvm::errs(), nullptr);
 
     return 0;
 }

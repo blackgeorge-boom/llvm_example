@@ -21,7 +21,7 @@ llvm::Value* VariableExprAST::codegen()
     // Look this variable up in the function.
     llvm::Value* V = NamedValues[Name];
     if (!V)
-        LogErrorV("Unknown variable name");
+        return LogErrorV("Unknown variable name");
     return V;
 }
 
@@ -33,7 +33,7 @@ llvm::Value* BinaryExprAST::codegen()
     if (!L || !R)
         return nullptr;
 
-    switch(Op) {
+    switch (Op) {
         case '+':
             return Builder.CreateFAdd(L, R, "addtmp");
         case '-':
@@ -46,7 +46,7 @@ llvm::Value* BinaryExprAST::codegen()
             return Builder.CreateUIToFP(L, llvm::Type::getDoubleTy(TheContext),
                                         "booltmp");
         default:
-            LogErrorV("Invalid binary operator");
+            return LogErrorV("Invalid binary operator");
     }
 }
 
@@ -98,10 +98,10 @@ llvm::Function *FunctionAST::codegen()
     llvm::Function* TheFunction = TheModule->getFunction(Proto->getName());
 
     if (!TheFunction)
-        Proto->codegen();
+        TheFunction = Proto->codegen();
 
     if (!TheFunction)
-        return nullptr ;
+        return nullptr;
 
     if (!TheFunction->empty())
         return (llvm::Function*)LogErrorV("Function cannot be redefined.") ;

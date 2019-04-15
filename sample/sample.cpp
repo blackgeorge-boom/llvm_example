@@ -443,7 +443,7 @@ Value *BinaryExprAST::codegen() {
             // Convert bool 0/1 to double 0.0 or 1.0
             return Builder.CreateUIToFP(L, Type::getDoubleTy(TheContext), "booltmp");
         default:
-            return LogErrorV("invalid binary operator");
+            return LogErrorV("Invalid binary operator");
     }
 }
 
@@ -608,7 +608,7 @@ int main() {
     MainLoop();
 
     // Print out all of the generated code.
-//    TheModule->print(errs(), nullptr);
+    TheModule->print(errs(), nullptr);
 
     return 0;
 }

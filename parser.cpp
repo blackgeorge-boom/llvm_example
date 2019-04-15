@@ -38,9 +38,9 @@ std::unique_ptr<PrototypeAST> LogErrorP(const char *Str) {
 }
 
 std::unique_ptr<ExprAST> ParseNumberExpr() {
-    auto Result = llvm::make_unique<NumberExprAST> (NumVal);
+    auto Result = llvm::make_unique<NumberExprAST>(NumVal);
     getNextToken(); // consume the number
-    return Result;
+    return std::move(Result);
 }
 
 std::unique_ptr<ExprAST> ParseParenExpr() {
@@ -50,7 +50,7 @@ std::unique_ptr<ExprAST> ParseParenExpr() {
         return nullptr;
 
     if (CurTok != ')')
-        return LogError("expected ')'\n");
+        return LogError("expected ')'");
     getNextToken();
     return V;
 }
