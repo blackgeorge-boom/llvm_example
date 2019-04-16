@@ -18,7 +18,7 @@
 #include "lexer.h"
 #include "ast.h"
 #include "parser.h"
-#include "top_lvl_parser.h"
+//#include "top_lvl_parser.h"
 
 //using namespace llvm;
 
@@ -44,6 +44,65 @@
 //===----------------------------------------------------------------------===//
 // Main driver code.
 //===----------------------------------------------------------------------===//
+
+static void HandleDefinition() {
+    if (auto FnAST = ParseDefinition()) {
+        if (auto *FnIR = FnAST->codegen()) {
+            fprintf(stderr, "Read function definition:");
+            FnIR->print(llvm::errs());
+            fprintf(stderr, "\n");
+        }
+    } else {
+        getNextToken();
+    }
+}
+
+static void HandleExtern() {
+    if (auto ProtoAST = ParseExtern()) {
+        if (auto *FnIR = ProtoAST->codegen()) {
+            fprintf(stderr, "Read extern:");
+            FnIR->print(llvm::errs());
+            fprintf(stderr, "\n");
+        }
+    } else {
+        getNextToken();
+    }
+}
+
+static void HandleTopLevelExpression() {
+    if (auto FnAST = ParseTopLevelExpr()) {
+        if (auto *FnIR = FnAST->codegen()) {
+            fprintf(stderr, "Read top-level expression:");
+            FnIR->print(llvm::errs());
+            fprintf(stderr, "\n");
+        }
+    } else {
+        getNextToken();
+    }
+}
+
+static void MainLoop() {
+    while (true) {
+        fprintf(stderr, "ready> ");
+
+        switch (CurTok) {
+            case tok_eof:
+                return;
+            case ';':
+                getNextToken();
+                break;
+            case tok_def:
+                HandleDefinition();
+                break;
+            case tok_extern:
+                HandleExtern();
+                break;
+            default:
+                HandleTopLevelExpression();
+                break;
+        }
+    }
+}
 
 int main()
 {

@@ -51,23 +51,18 @@ void MainLoop() {
         fprintf(stderr, "ready> ");
         switch (CurTok) {
             case tok_eof:
-                fprintf(stderr, "eof ");
                 return;
             case ';':
-                fprintf(stderr, "; ");
                 // if you parse it you get nullptr as AST
                 getNextToken();
                 break;
             case tok_def:
-                fprintf(stderr, "def ");
                 HandleDefinition();
                 break;
             case tok_extern:
-                fprintf(stderr, "extern ");
                 HandleExtern();
                 break;
             default:
-                fprintf(stderr, "top ");
                 HandleTopLevelExpression();
                 break;
         }
