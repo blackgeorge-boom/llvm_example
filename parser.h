@@ -8,6 +8,7 @@
 #include <map>
 #include "lexer.h"
 #include "ast.h"
+#include "logger.h"
 
 /// CurTok/getNextToken - Provide a simple token buffer.
 ///

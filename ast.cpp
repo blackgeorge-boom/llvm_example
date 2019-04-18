@@ -3,17 +3,12 @@
 //
 
 #include "ast.h"
+#include "logger.h"
 
 llvm::LLVMContext TheContext;
 llvm::IRBuilder<> Builder(TheContext);
 std::unique_ptr<llvm::Module> TheModule;
 std::map<std::string, llvm::Value *> NamedValues;
-
-llvm::Value* LogErrorV(const char *Str)
-{
-    fprintf(stderr, "Error %s\n", Str);
-    return nullptr;
-}
 
 llvm::Value* NumberExprAST::codegen()
 {
