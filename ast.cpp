@@ -4,6 +4,7 @@
 
 #include "ast.h"
 #include "logger.h"
+#include "ir_opt.h"
 
 llvm::LLVMContext TheContext;
 llvm::IRBuilder<> Builder(TheContext);
@@ -103,8 +104,8 @@ llvm::Function *FunctionAST::codegen()
     if (!TheFunction)
         return nullptr;
 
-//    if (!TheFunction->empty())
-//        return (llvm::Function*)LogErrorV("Function cannot be redefined.") ;
+    // if (!TheFunction->empty())
+    //    return (llvm::Function*)LogErrorV("Function cannot be redefined.") ;
 
     // Create a new basic block to start insertion into.
     llvm::BasicBlock* BB = llvm::BasicBlock::Create(TheContext, "entry", TheFunction);
@@ -121,6 +122,9 @@ llvm::Function *FunctionAST::codegen()
 
         // Validate the generated code, checking for consistency.
         llvm::verifyFunction(*TheFunction);
+
+        // Optimize the function.
+        TheFPM->run(*TheFunction);
 
         return TheFunction;
     }

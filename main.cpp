@@ -3,22 +3,12 @@
 #include <bits/unique_ptr.h>
 #include <vector>
 #include <map>
-#include "llvm/ADT/APFloat.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/Verifier.h"
 
 #include "lexer.h"
 #include "ast.h"
 #include "parser.h"
 #include "top_lvl_parser.h"
+#include "ir_opt.h"
 
 //using namespace llvm;
 
@@ -38,14 +28,13 @@ int main()
     fprintf(stderr, "ready> ");
     getNextToken();
 
-    // Make the module, which holds all the code.
-    TheModule = llvm::make_unique<llvm::Module>("my cool jit", TheContext);
+    InitializeModuleAndPassManager();
 
     // Run the main "interpreter loop" now.
     MainLoop();
 
     // Print out all of the generated code.
-    TheModule->print(llvm::errs(), nullptr);
+    // TheModule->print(llvm::errs(), nullptr);
 
     return 0;
 }
