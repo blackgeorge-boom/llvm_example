@@ -16,8 +16,9 @@ message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
 include_directories(${LLVM_INCLUDE_DIRS})
 add_definitions(${LLVM_DEFINITIONS})
 
-add_executable(llvm_example main.cpp ast.h lexer.h lexer.cpp parser.h parser.cpp top_lvl_parser.cpp top_lvl_parser.h ast.cpp logger.cpp logger.h ir_opt.cpp ir_opt.h)
+add_executable(llvm_example main.cpp ast.h lexer.h lexer.cpp parser.h parser.cpp top_lvl_parser.cpp top_lvl_parser.h ast.cpp logger.cpp logger.h ir_opt.cpp ir_opt.h include/KaleidoscopeJIT.h)
 #add_executable(sample sample/sample.cpp)
+add_executable(sample_opt sample/sample_opt.cpp)
 
 # Find the libraries that correspond to the LLVM components
 # that we wish to use
