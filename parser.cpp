@@ -27,13 +27,15 @@ int GetTokPrecedence()
     return TokPrec;
 }
 
-std::unique_ptr<ExprAST> ParseNumberExpr() {
+std::unique_ptr<ExprAST> ParseNumberExpr()
+{
     auto Result = llvm::make_unique<NumberExprAST>(NumVal);
     getNextToken(); // consume the number
     return std::move(Result);
 }
 
-std::unique_ptr<ExprAST> ParseParenExpr() {
+std::unique_ptr<ExprAST> ParseParenExpr()
+{
     getNextToken();
     auto V = ParseExpression();
     if (!V)
@@ -45,7 +47,8 @@ std::unique_ptr<ExprAST> ParseParenExpr() {
     return V;
 }
 
-std::unique_ptr<ExprAST> ParseIdentifierExpr() {
+std::unique_ptr<ExprAST> ParseIdentifierExpr()
+{
     std::string IdName = IdentifierStr;
 
     getNextToken();
@@ -78,7 +81,8 @@ std::unique_ptr<ExprAST> ParseIdentifierExpr() {
     return llvm::make_unique<CallExprAST>(IdName, std::move(Args));
 }
 
-std::unique_ptr<ExprAST> ParsePrimary() {
+std::unique_ptr<ExprAST> ParsePrimary()
+{
     switch (CurTok) {
         case tok_identifier:
             return ParseIdentifierExpr();
@@ -86,13 +90,16 @@ std::unique_ptr<ExprAST> ParsePrimary() {
             return ParseNumberExpr();
         case '(':
             return ParseParenExpr();
+        case tok_if:
+            return ParseIfExpr();
         default:
             return LogError("unknown token when expecting an expression");
     }
 }
 
 std::unique_ptr<ExprAST> ParseBinOpRHS(int ExprPrec,
-                                              std::unique_ptr<ExprAST> LHS) {
+                                       std::unique_ptr<ExprAST> LHS)
+{
     // If this is a binop, find its precedence.
     while (true) {
         int TokPrec = GetTokPrecedence();
@@ -126,7 +133,8 @@ std::unique_ptr<ExprAST> ParseBinOpRHS(int ExprPrec,
     } // loop around to the top of the while loop.
 }
 
-std::unique_ptr<ExprAST> ParseExpression() {
+std::unique_ptr<ExprAST> ParseExpression()
+{
     auto LHS = ParsePrimary();
     if (!LHS)
         return nullptr;
@@ -134,7 +142,8 @@ std::unique_ptr<ExprAST> ParseExpression() {
     return ParseBinOpRHS(0, std::move(LHS));
 }
 
-std::unique_ptr<PrototypeAST> ParsePrototype() {
+std::unique_ptr<PrototypeAST> ParsePrototype()
+{
     if (CurTok != tok_identifier)
         return LogErrorP("Expected function name in prototype");
 
@@ -156,7 +165,8 @@ std::unique_ptr<PrototypeAST> ParsePrototype() {
     return llvm::make_unique<PrototypeAST>(FnName, std::move(ArgNames));
 }
 
-std::unique_ptr<FunctionAST> ParseDefinition() {
+std::unique_ptr<FunctionAST> ParseDefinition()
+{
     getNextToken(); // eat 'def'.
     auto Proto = ParsePrototype();
     if (!Proto)
@@ -167,7 +177,8 @@ std::unique_ptr<FunctionAST> ParseDefinition() {
     return nullptr;
 }
 
-std::unique_ptr<FunctionAST> ParseTopLevelExpr() {
+std::unique_ptr<FunctionAST> ParseTopLevelExpr()
+{
     if (auto E =  ParseExpression()) {
         // Make an anonymous proto.
         auto Proto = llvm::make_unique<PrototypeAST>("__anon_expr",
@@ -177,8 +188,38 @@ std::unique_ptr<FunctionAST> ParseTopLevelExpr() {
     return nullptr;
 }
 
-std::unique_ptr<PrototypeAST> ParseExtern() {
+std::unique_ptr<PrototypeAST> ParseExtern()
+{
     getNextToken(); // eat 'extern'.
     return ParsePrototype();
+}
+
+std::unique_ptr<ExprAST> ParseIfExpr()
+{
+    getNextToken(); // eat the if.
+
+    // condition
+    auto Cond = ParseExpression();
+    if (!Cond)
+        return nullptr;
+
+    if (CurTok != tok_then)
+        return LogError("Expected then.");
+    getNextToken(); // eat the then.
+
+    auto Then = ParseExpression();
+    if (!Then)
+        return nullptr;
+
+    if (CurTok != tok_else)
+        return LogError("Expected else.");
+    getNextToken(); // eat the else.
+
+    auto Else = ParseExpression();
+    if (!Else)
+        return nullptr;
+
+    return llvm::make_unique<IfExprAST>(std::move(Cond), std::move(Then),
+                                        std::move(Else));
 }
 

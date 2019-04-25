@@ -13,6 +13,8 @@
 #include "llvm/IR/Module.h"
 #include "llvm/IR/Type.h"
 #include "llvm/IR/Verifier.h"
+#include "../parser.h"
+
 #include <algorithm>
 #include <cctype>
 #include <cstdio>
@@ -397,6 +399,10 @@ static std::unique_ptr<FunctionAST> ParseTopLevelExpr() {
 static std::unique_ptr<PrototypeAST> ParseExtern() {
     getNextToken(); // eat extern.
     return ParsePrototype();
+}
+
+std::unique_ptr<ExprAST> ParseIfExpr() {
+    return std::unique_ptr<ExprAST>();
 }
 
 //===----------------------------------------------------------------------===//

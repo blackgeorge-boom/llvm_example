@@ -104,8 +104,10 @@ llvm::Function *FunctionAST::codegen()
     if (!TheFunction)
         return nullptr;
 
-    // if (!TheFunction->empty())
-    //    return (llvm::Function*)LogErrorV("Function cannot be redefined.") ;
+     if (!TheFunction->empty())
+        return (llvm::Function*)LogErrorV("Function cannot be redefined.") ;
+
+     //TODO: fix extern foo(a) vs def foo(b) b
 
     // Create a new basic block to start insertion into.
     llvm::BasicBlock* BB = llvm::BasicBlock::Create(TheContext, "entry", TheFunction);

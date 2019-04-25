@@ -34,7 +34,7 @@ int main()
     MainLoop();
 
     // Print out all of the generated code.
-    // TheModule->print(llvm::errs(), nullptr);
+    TheModule->print(llvm::errs(), nullptr);
 
     return 0;
 }

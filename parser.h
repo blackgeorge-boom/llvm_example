@@ -11,7 +11,6 @@
 #include "logger.h"
 
 /// CurTok/getNextToken - Provide a simple token buffer.
-///
 /// CurTok is the current token the parser is looking at.
 extern int CurTok;
 
@@ -25,10 +24,6 @@ extern std::map<char, int> BinopPrecedence;
 
 /// GetTokPrecedence - Get the precedence of the pending binary operator token.
 int GetTokPrecedence();
-
-/// LogError* - These are little helper functions for error handling.
-std::unique_ptr<ExprAST> LogError(const char *Str);
-std::unique_ptr<PrototypeAST> LogErrorP(const char *Str);
 
 /// numberexpr ::= number
 std::unique_ptr<ExprAST> ParseNumberExpr();
@@ -68,5 +63,8 @@ std::unique_ptr<FunctionAST> ParseTopLevelExpr();
 
 /// external ::= 'extern' prototype
 std::unique_ptr<PrototypeAST> ParseExtern();
+
+/// ifexpr ::= 'if' expression 'then' expression 'else' expression
+std::unique_ptr<ExprAST> ParseIfExpr();
 
 #endif //LLVM_EXAMPLE_PARSER_H
