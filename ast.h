@@ -120,7 +120,7 @@ public:
               std::unique_ptr<ExprAST> Else)
         : Cond(std::move(Cond)), Then(std::move(Then)), Else(std::move(Else)) {}
 
-    llvm::Function *codegen();
+    llvm::Value *codegen();
 };
 
 /// This is an object that owns LLVM core data structures
